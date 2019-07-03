@@ -52,7 +52,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <!-- {{ k = 0  -->
+        {{ k = 0 }}
         <p><b>Spiros generated so far: </b> <ul> <li v-for ="i in allSpiros"> {{ k ++ }} {{ i }} </li> </ul> </p>
       </b-col>
     </b-row>
