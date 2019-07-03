@@ -36,4 +36,5 @@ npm run dev
 
 * [Solidity](https://solidity.readthedocs.io/en/v0.5.3/) - v0.5.3
 * [Vue.js](https://vuejs.org/) 
+* [Metamask](https://metamask.io/)
 * [web3.js](https://github.com/ethereum/web3.js/)
