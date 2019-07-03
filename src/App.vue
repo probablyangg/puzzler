@@ -3,7 +3,7 @@
     <b-row class="header-row">
       <b-col>
         <h1>Puzzler</h1>
-        <img src="./assets/Viper/spiro3.png" class = "unknown-viper">
+        <img src="./assets/spiro/spiro3.png" class = "unknown-viper">
       </b-col>
     </b-row>
 
@@ -12,8 +12,6 @@
         <h4>
           {{ questions[level].question }}
         </h4>
-
-<!-- 6210001000 -->
         <b-form>
           <b-col class="middle-container">
         <img v-if="isLoading" src="https://media.giphy.com/media/11cXHq5SBfWbug/giphy.gif"></b-col>
@@ -49,12 +47,13 @@
     </b-row>
     <b-row>
       <b-col>
-        <p><b>SpiroID on sale: </b> <ul> <li v-for ="i in spirosOnSale"> {{ i }} </li> </ul> </p>
+        <p><b>SpiroID on sale: </b> <span v-for ="i in spirosOnSale"> {{ i }}, </span> </p>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <p><b>Spiros generated so far: </b> <ul> <li v-for ="i in allSpiros"> {{ i }} </li> </ul> </p>
+        <!-- {{ k = 0  -->
+        <p><b>Spiros generated so far: </b> <ul> <li v-for ="i in allSpiros"> {{ k ++ }} {{ i }} </li> </ul> </p>
       </b-col>
     </b-row>
     <b-row>
@@ -69,15 +68,13 @@
         <b-col class="middle-container">
         <img v-if="isLoading" src="https://media.giphy.com/media/11cXHq5SBfWbug/giphy.gif"></b-col>
         <b-form-group v-if="!isLoading">
-          <p>To freeze your progress: </p>
+          <p>To freeze/level up:</p>
             <b-form-input id="spiroIdToBuy"
                           v-model="spiroIdToBuy"
                           required
                           placeholder="Spiro ID">
             </b-form-input>
           </b-form-group>
-          
-      
           <b-button 
           v-if="!isLoading"
           v-on:click="buyNew" type="button">Submit</b-button>
@@ -90,7 +87,7 @@
         <b-col class="middle-container">
         <img v-if="isLoading" src="https://media.giphy.com/media/11cXHq5SBfWbug/giphy.gif"></b-col>
         <b-form-group v-if="!isLoading">
-          <p>Sell spiro: </p>
+          <p>Sell:</p>
             <b-form-input id="sellSpiroId"
                           v-model="sellSpiroId"
                           required
@@ -108,51 +105,6 @@
     </b-col>
     </b-row>
     <hr>
-    <b-row>
-    <b-col class="action-container">
-    <b-form>
-        <b-col class="middle-container">
-        <img v-if="isLoading" src="https://media.giphy.com/media/11cXHq5SBfWbug/giphy.gif"></b-col>
-        <b-form-group v-if="!isLoading">
-          <p>Buy from available spiros and level up:</p>
-            <b-form-input id="buyAndLevelUp"
-                          v-model="buyAndLevelUp"
-                          required
-                          placeholder="Spiro ID">
-            </b-form-input>
-          </b-form-group>
-          
-      
-          <b-button 
-          v-if="!isLoading"
-          v-on:click="buyAndLevel" type="button">Submit</b-button>
-          
-          <p>Price for each Spiro (S) = (S.level * 0.005) ether </p>
-        </b-form>
-    </b-col>
-    </b-row>
-    <hr>
-    <!-- <p>
-    <ul >
-      <li v-for="item in allSpiros"> {{ item }} </li>
-    </ul>
-    </p> -->
-    <!-- <b-row v-for="i in Math.ceil(allSpiros.length / 3)" v-bind:key="i"> -->
-      <!-- <b-col cols="4" v-for="item in allSpiros.slice((i - 1) * 3, i * 3)" -->
-             <!-- v-bind:item="item" -->
-             <!-- v-bind:key="item.id"> -->
-        <!-- <b-card style="height:400px;" class="mb-2"> -->
-          <!-- <b-img thumbnail fluid :src="item.url" class="image"/> -->
-          <!-- <p class="card-text mt-2 text-center"> -->
-            <!-- <b>level:</b> {{ item.level }} -->
-            <!-- <br> -->
-            <!-- <b>Creator:</b> {{ item.creator }} -->
-            <!-- <span v-if="item.matron == 0 && item.sire == 0">Bought</span> -->
-            <!-- <span v-else>{{ item.matron }} & {{ item.sire }}</span> -->
-          <!-- </p> -->
-        <!-- </b-card> -->
-      <!-- </b-col> -->
-    <!-- </b-row> -->
   </b-container>
 </template>
 
@@ -160,22 +112,8 @@
 import allQuestions from './components/questions.json';
 import getWeb3 from '../contracts/web3';
 import contractAbi from '../contracts/abi';
-
-
-// import Viper1 from './assets/Viper/1.png';
-// import Viper2 from './assets/Viper/2.png';
-// import Viper3 from './assets/Viper/3.png';
-// import Viper4 from './assets/Viper/4.png';
-// import Viper5 from './assets/Viper/5.png';
-// import Viper6 from './assets/Viper/6.png';
-// import ViperX from './assets/Viper/unknown.png';
-
 //puzzlerContract
 const contractAddress = '0xb572e8d58b214455e6aff3aee9e0e8f55a102354';
-
-
-// const vipersMap = [null, Viper1, Viper2, Viper3, Viper4, Viper5, Viper6];
-
 export default {
   name: 'App',
   data() {
@@ -232,79 +170,31 @@ export default {
         console.log (this.questions[this.level].answer);
         alert ("This isn't the right answer");
       }
-      // this.getSpiros();
       this.getContractSpiros();
     }, 
 
     buyNew () {
-      let amt = (this.level - 1) * 0.005;
-      // this.isLoading = true;
-      console.log(this.spiroIdToBuy);
-      console.log(typeof(this.spiroIdToBuy));
-      
+      let lvl;
+      this.contractInstance.methods.spiros(this.spiroIdToBuy).call({
+          from: this.account
+        }).then((s) => {
+          lvl = s.level;
+        });
+        let amt = lvl * 0.005;
       this.contractInstance.methods.buyNewSpiro(this.spiroIdToBuy).send({
         from: this.account,
         value: web3.toWei(amt, 'ether')
       }).then((receipt) => {
         this.addSpiroFromReceipt(receipt);
-        this.level = 1;
         this.spiro = this.spiroIdToBuy;
         this.isLoading = false;
       }).catch((err) => {
         console.log (err);
         this.isLoading = false;
       });
-      //this.getSpiro ();
-      // this.getSpiros ();
       this.getContractSpiros();
     },
 
-    // buyViper() {
-    //   this.isLoading = true;
-    //   this.contractInstance.methods.buyViper().send({
-    //     from: this.account,
-    //     value: web3.toWei(0.02, 'ether'),
-    //   }).then((receipt) => {
-    //     this.addViperFromReceipt(receipt);
-    //     this.isLoading = false;
-    //   }).catch((err) => {
-    //     console.log(err, 'err');
-    //     this.isLoading = false;
-    //   });
-    // },
-
-    // breedVipers() {
-    //   this.isLoading = true;
-    //   console.log(this.matron);
-    //   this.contractInstance.methods.breedVipers(this.matron, this.sire).send({
-    //     from: this.account,
-    //     value: web3.toWei(0.05, 'ether'),
-    //   }).then((receipt) => {
-    //     this.addViperFromReceipt(receipt);
-    //     this.isLoading = false;
-    //   }).catch((err) => {
-    //     console.log(err, 'err');
-    //     this.isLoading = false;
-    //   });
-    // },
-// getSpiros() {
-    //   // this.isLoading = true;
-    //   this.contractInstance.methods.spiros(this.account).call({
-    //     from:this.account
-    //   }).then((receipt) => {
-    //     this.allSpiros = receipt;
-    //     // this.contractInstance.methods.spiros(this.spiro).call({
-    //     //   from: this.account
-    //     // }).then((s) => {
-    //     //   this.level = s.level;
-    //     // });
-    //     // this.isLoading = false;
-    //     // console.log ("user spiro set to: ", this.spiro);
-    //   }).catch((err) => {
-    //     console.log(err, 'err');
-    //     // this.isLoading = false;
-    //   });
-    // },
     getSpiro() {
       this.isLoading = true;
       this.contractInstance.methods.ownerToSpiro(this.account).call({
@@ -339,61 +229,27 @@ export default {
       this.contractInstance.methods.sellSpiro(this.sellSpiroId).send({
         from: this.account
       }).then((receipt) => {
-        spirosOnSale.push(sellSpiroId);
+        console.log ("ok");
+        this.contractInstance.methods.spiroToSalePrice(this.sellSpiroId).call ({
+          from: this.account
+        }).then ((price) => {
+          console.log ("now pushing");
+          spirosOnSale.push(sellSpiroId, price);
+        })
         this.spiro = "-"
         getSpiro();
       });
     } ,
-    // getVipers() {
-    //   this.isLoading = true;
-    //   this.contractInstance.methods.ownedVipers().call({
-    //     from: this.account,
-    //   }).then((receipt) => {
-    //     for (let i = 0; i < receipt.length; i += 1) {
-    //       this.contractInstance.methods.getViperDetails(receipt[i]).call({
-    //         from: this.account,
-    //       }).then((viper) => {
-    //         this.vipers.push({
-    //           id: viper[0],
-    //           genes: viper[1],
-    //           matron: viper[2],
-    //           sire: viper[3],
-    //           url: vipersMap[viper[1]],
-    //         });
-    //       }).catch((err) => {
-    //         console.log(err, 'err');
-    //       });
-    //     }
-    //     this.isLoading = false;
-    //   }).catch((err) => {
-    //     console.log(err, 'err');
-    //     this.isLoading = false;
-    //   });
-    // },
     addSpiroFromReceipt(receipt) {
       console.log("---");
       console.log(receipt);
       console.log(typeof(receipt));
       this.allSpiros.push({
-        // id: receipt.events.newSpiro.returnValues.spiroId,
         level: receipt.events.newSpiro.returnValues.level,
-        creator: receipt.events.newSpiro.returnValues.creator,
-        // url: spirosMap[receipt.events.newSpiro.returnValues.spiroId]
+        creator: receipt.events.newSpiro.returnValues.creator
       });
       console.log(this.allSpiros);
-    },
-
-    
-    // addViperFromReceipt(receipt) {
-    //   this.vipers.push({
-    //     id: receipt.events.Birth.returnValues.viperId,
-    //     genes: receipt.events.Birth.returnValues.genes,
-    //     matron: receipt.events.Birth.returnValues.matronId,
-    //     sire: receipt.events.Birth.returnValues.sireId,
-    //     url: vipersMap[receipt.events.Birth.returnValues.genes],
-    //   });
-    // },
-
+    }
   },
 };
 </script>

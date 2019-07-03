@@ -16,15 +16,19 @@
             "answer": 2
       },
       {
-            "question": "8 ^ 2",
+            "question": "7 ^ 2",
+            "answer": 49
+      },
+      {
+            "question": "4 ^ 2",
+            "answer": 16
+      },
+      {
+            "question": "8 / 2",
+            "answer": 4
+      },
+      {
+            "question": "4 ^ 3",
             "answer": 64
-      },
-      {
-            "question":"Why is the sky blue",
-            "answer": "melody"
-      },
-      {
-            "question": "Last year that was the same upside down",
-            "answer": "mujhe kya pata"
       }
 ]

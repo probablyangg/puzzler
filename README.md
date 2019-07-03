@@ -18,7 +18,7 @@ A simple Ethereum based decentralized application demonstrating usage of ERC-721
 - Contract is currently deployed on Ropsten Testnet
 
 
-## Running It Locally
+## Running Locally
 
 Clone this repo via to your local machine and install the dependencies by doing the following:
 
@@ -36,7 +36,7 @@ Switch to Ropsten Testnet on Metamask
 
 ## Built With
 
-* [Solidity](https://solidity.readthedocs.io/en/v0.5.3/) - v0.5.3
+* [Solidity](https://solidity.readthedocs.io/en/v0.5.3/) - v0.5.3 (compiled on Remix IDE, solc `v0.5.3+commit.10d17f24.Emscripten.clang`)
 * [Vue.js](https://vuejs.org/) 
 * [Metamask](https://metamask.io/)
 * [web3.js](https://github.com/ethereum/web3.js/)
