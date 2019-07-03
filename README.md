@@ -15,6 +15,7 @@ A simple Ethereum based decentralized application demonstrating usage of ERC-721
   - freeze his/her progress (level) by buying the spiro
   - sell the spiro he/she owns.
   - buy another spiro - of a higher level
+- Contract is currently deployed on Ropsten Testnet
 
 
 ## Running It Locally
@@ -31,6 +32,7 @@ Serve the application
 ```bash
 npm run dev
 ```
+Switch to Ropsten Testnet on Metamask
 
 ## Built With
 
