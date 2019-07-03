@@ -1,36 +1,32 @@
-# CryptoVipers
+# Puzzler :game_die:
 
-A simple Ethereum-based [CryptoKitties](https://www.cryptokitties.co/)-like decentralized application (dapp) where you can own, buy, and breed vipers.
+A simple Ethereum based decentralized application demonstrating usage of ERC-721 tokens.
 
-Dapp made referring the following tutorial: 
+![Puzzler](./puzzler.png)
 
-https://medium.com/@sbenemerito/creating-a-cryptokitties-like-dapp-5115efc9e0bb
+## Description
 
----
+- Answering questions would increment the level for the user.
+- Each puzzle solved mints an ERC-721 token (PZLR), which is owned by the smart contract. Called 'Spiro' in the game.
+- Each Spiro is representative of: 
+  - creator 
+  - level at which it was created
+- User has an option to either:
+  - freeze his/her progress (level) by buying the spiro
+  - sell the spiro he/she owns.
+  - buy another spiro - of a higher level
 
-![CryptoVipers](https://i.imgur.com/pBY8VX2.gif)
-
-
-## Prerequisites
-
-* **Node** - v10.x.x (preferrably v10.15.0 for long term support)
-* **npm** - v6.x.x (preferrably v6.6.0)
 
 ## Running It Locally
 
 Clone this repo via to your local machine and install the dependencies by doing the following:
 
 ```bash
-git clone https://github.com/openberry-ac/cryptovipers.git
-cd cryptovipers
-npm install
+git clone https://github.com/nglglhtr/puzzler.git
+cd puzzler
+npm i
 ```
-
-Serve the application with hot reload in a development environment via:
-
-```bash
-npm install -s web3@1.0.0-beta.37
-```
+Serve the application
 
 ```bash
 npm run dev
@@ -38,10 +34,6 @@ npm run dev
 
 ## Built With
 
-* [Solidity](https://solidity.readthedocs.io/en/v0.5.3/) - Ethereum's smart contract programming language
-* [Vue.js](https://vuejs.org/) - The Javascript framework used
-* [web3.js](https://github.com/ethereum/web3.js/) - Javascript library used to interact with the Ethereum blockchain
-
-## Tutorial
-
-Tutorial available at [openberry](https://openberry.ac/)
+* [Solidity](https://solidity.readthedocs.io/en/v0.5.3/) - v0.5.3
+* [Vue.js](https://vuejs.org/) 
+* [web3.js](https://github.com/ethereum/web3.js/)
