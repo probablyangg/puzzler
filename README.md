@@ -40,6 +40,8 @@ A simple Ethereum based decentralized application demonstrating usage of ERC-721
 
 Answer questions to mint Spiro, buy spiro from the contract (corresponding to the level you want to freeze to), sell your spiro (goes back to the contract). 
 
+So basically, once you open the app, you have an option to either buy a spiro (NFT) of a corresponding level you want to get to, or mint tokens by answering questions, or sell the token you own. 
+
 ## Running Locally
 
 Clone this repo to your local machine and install the dependencies:
