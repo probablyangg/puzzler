@@ -20,7 +20,8 @@ contract puzzler is ERC721Full {
     }
     // list of existing spiros 
     Spiro[] public spiros;
-      
+    Spiro[] public ownedByContract;
+    
     // ether balance of all users     
     mapping (address => uint) public balanceOfEther;
     
@@ -75,11 +76,15 @@ contract puzzler is ERC721Full {
             level: userLevel,
             creator: msg.sender
         });
+        
         uint256 newSpiroId = spiros.push(NewSpiro).sub(1);
+        
         // the minted token is owned by the smart contract until purchased
         super._mint(address(this), newSpiroId);
+        
+        
         // created-by and level of the creator
-        emit newSpiro (msg.sender, userLevel);
+        // emit newSpiro (msg.sender, userLevel);
         return newSpiroId;
     }
     
@@ -135,17 +140,17 @@ contract puzzler is ERC721Full {
         return result;
     } 
     
-    /** @dev return spiros currently on sale 
-     */
-    function getUpForSellingSpiros () public view returns (uint [] memory) {
-        uint [] memory result = new uint[](spiros.length);
-        uint counter = 0;
-        for (uint i = 0; i < spiros.length; i ++) {
-            if (spiroToSalePrice[i] > 0) {
-                result[counter] = i;
-                counter ++;
-            }
-        }
-        return result;
-    }    
+    // /** @dev return spiros currently on sale 
+    //  */
+    // function getUpForSellingSpiros () public view returns (uint [] memory) {
+    //     uint [] memory result = new uint[](spiros.length);
+    //     uint counter = 0;
+    //     for (uint i = 0; i < spiros.length; i ++) {
+    //         if (spiroToSalePrice[i] > 0) {
+    //             result[counter] = i;
+    //             counter ++;
+    //         }
+    //     }
+    //     return result;
+    // }    
 }

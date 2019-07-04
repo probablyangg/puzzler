@@ -45,20 +45,25 @@
         <p><b>Spiro: </b> {{ spiro }} <b>PZLR</b> </p>
       </b-col>
     </b-row>
-    <b-row>
+    <!-- <b-row>
       <b-col>
         <p><b>Spiros on sale: </b> <span v-for ="i in spirosOnSale"> {{ i }}, </span> </p>
       </b-col>
-    </b-row>
-    <b-row>
+    </b-row> -->
+    <!-- <b-row>
       <b-col>
         {{ k = 0 }}
         <p><b>Spiros generated so far: </b> <ul> <li v-for ="i in allSpiros"> {{ k ++ }} {{ i }} </li> </ul> </p>
       </b-col>
+    </b-row> -->
+    <b-row>
+      <b-col>
+        <p><b>Spiros owned by the contract (spiroId, level): </b> <ul> <li v-for ="i in contractSpiros"> {{ i }}  </li> </ul> </p>
+      </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <p><b>Spiros owned by the contract: </b> <span v-for ="i in contractSpiros"> {{ i }}, </span></p>
+        <p><b>Total number of questions: </b> {{ questions.length }} </p>
       </b-col>
     </b-row>
     <hr>
@@ -68,7 +73,7 @@
         <b-col class="middle-container">
         <img v-if="isLoading" src="https://media.giphy.com/media/11cXHq5SBfWbug/giphy.gif"></b-col>
         <b-form-group v-if="!isLoading">
-          <p>To freeze/level up:</p>
+          <p>Buy to freeze/level up:</p>
             <b-form-input id="spiroIdToBuy"
                           v-model="spiroIdToBuy"
                           required
@@ -113,7 +118,7 @@ import allQuestions from './components/questions.json';
 import getWeb3 from '../contracts/web3';
 import contractAbi from '../contracts/abi';
 //puzzlerContract
-const contractAddress = '0x1a2b0342db7b78201aa8d016733376ccd6e0382b';
+const contractAddress = '0x989da6d8a9358d7de3859cf3a15303e9c673cf55';
 export default {
   name: 'App',
   data() {
@@ -122,8 +127,8 @@ export default {
       account: null,
       contractInstance: null,
       contractAddr: contractAddress,
-      level: null,
-      spiro: null,
+      level: 0,
+      spiro: 0,
       spirosOnSale: [],
       allSpiros: [],
       contractSpiros: [],
@@ -158,9 +163,11 @@ export default {
       this.contractInstance.methods.createSpiro(this.level).send({
         from: this.account
       }).then((receipt) => {
-        this.addSpiroFromReceipt(receipt);
+        // this.addSpiroFromReceipt(receipt);
         this.level ++;
         this.isLoading = false;
+        this.getContractSpiros();
+
       }).catch((err) => {
         console.log(err, 'err');
         this.isLoading = false;
@@ -172,36 +179,48 @@ export default {
         console.log (this.questions[this.level].answer);
         alert ("This isn't the right answer");
       }
-      this.getContractSpiros();
+      // this.getContractSpiros();
     }, 
 
     buyNew () {
       let lvl;
+      let amt;
       this.isLoading = true;
 
       this.contractInstance.methods.spiros(this.spiroIdToBuy).call({
           from: this.account
         }).then((s) => {
           lvl = s.level;
-        });
-        let amt = lvl * 0.005;
-
-      this.contractInstance.methods.buyNewSpiro(this.spiroIdToBuy).send({
+          amt = lvl * 0.005;
+          return amt;
+          // console.log("level: ", lvl);
+        }).then((amt)=> {
+          console.log ("amt", amt);
+this.contractInstance.methods.buyNewSpiro(this.spiroIdToBuy).send({
         from: this.account,
         value: web3.toWei(amt, 'ether')
       }).then((receipt) => {
         
-        this.getContractSpiros();
-        this.getSpiro();
+        // this.getContractSpiros();
+        // this.getSpiro();
 
-        this.addSpiroFromReceipt(receipt);
+        // this.addSpiroFromReceipt(receipt);
         this.spiro = this.spiroIdToBuy;
 
         this.isLoading = false;
+
+        this.getContractSpiros();
+        this.getSpiro();
+
       }).catch((err) => {
         console.log (err);
         this.isLoading = false;
       });
+        })
+        // let amt = lvl * 0.005;
+        // console.log ("sending amt: ", amt);
+
+        
     },
 
     getSpiro() {
@@ -210,15 +229,15 @@ export default {
         from:this.account
       }).then((receipt) => {
         this.spiro = receipt;
-        this.level = receipt;
-        // this.contractInstance.methods.spiros(this.spiro).call({
-        //   from: this.account
-        // }).then((s) => {
-        //   console.log ("this.spiro = ", this.spiro);
-        //   console.log("setting level to: ", s.level);
-        //   console.log(s);
-        //   this.level = s.level;
-        // });
+        // this.level = receipt;
+        this.contractInstance.methods.spiros(this.spiro).call({
+          from: this.account
+        }).then((s) => {
+          console.log ("this.spiro = ", this.spiro);
+          console.log("setting level to: ", s.level);
+          console.log(s);
+          this.level = s.level;
+        });
         
         this.isLoading = false;
         console.log ("user spiro set to: ", this.spiro);
@@ -232,11 +251,37 @@ export default {
       this.contractInstance.methods.getSpiros().call({
         from: this.account
       }).then((allSpiros) => {
-        this.contractSpiros = allSpiros;
-        console.log ("user spiro set to: ", this.contractSpiros);
+        this.contractSpiros = [];
+
+        let cS = allSpiros;
+        
+        console.log ("user spiro set to: ", cS);
+
+        for (let i = 0; i < cS.length; i++) {
+          this.contractInstance.methods.spiros(cS[i]).call ({
+            from:this.account 
+          }).then((spiro) => {
+            console.log ("level for", spiro, " is ", spiro.level);
+
+            // console.log (cS[i] += ", "  + spiro.level);
+            
+            cS[i] += ", "  + spiro.level;
+            
+            this.contractSpiros.push(cS[i]);
+          })
+        }
+
+        console.log("contractSpiros: ", this.contractSpiros);
+
       }).catch((err) => {
         console.log (err, 'err');
       });
+    },
+
+    getAllSpiros () {
+      this.contractInstance.methods.spiros().call ({
+
+      })
     },
 
     getSpirosOnSale () {
@@ -256,23 +301,24 @@ export default {
         from: this.account
       }).then((receipt) => {
         console.log(receipt);
-        this.spiro = null;
+        // this.spiro = null;
         this.getSpiro();
-        this.getSpirosOnSale();
+        this.getContractSpiros();
+        // this.getSpirosOnSale();
         this.isLoading = false;
       });
     } ,
 
-    addSpiroFromReceipt(receipt) {
-      console.log("---");
-      console.log(receipt);
-      console.log(typeof(receipt));
-      this.allSpiros.push({
-        level: receipt.events.newSpiro.returnValues.level,
-        creator: receipt.events.newSpiro.returnValues.creator
-      });
-      console.log(this.allSpiros);
-    }
+    // addSpiroFromReceipt(receipt) {
+    //   console.log("---");
+    //   console.log(receipt);
+    //   console.log(typeof(receipt));
+    //   this.allSpiros.push({
+    //     level: receipt.events.newSpiro.returnValues.level,
+    //     creator: receipt.events.newSpiro.returnValues.creator
+    //   });
+    //   console.log(this.allSpiros);
+    // }
   },
 };
 </script>

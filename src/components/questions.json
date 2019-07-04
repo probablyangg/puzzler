@@ -30,5 +30,17 @@
       {
             "question": "4 ^ 3",
             "answer": 64
+      },
+      {
+            "question": "7 ^ 2",
+            "answer": 49
+      },
+      {
+            "question": "2 * 2",
+            "answer": 4
+      },
+      {
+            "question": "9 ^ 3",
+            "answer": 729
       }
 ]
