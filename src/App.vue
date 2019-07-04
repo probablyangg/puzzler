@@ -122,7 +122,7 @@ export default {
       account: null,
       contractInstance: null,
       contractAddr: contractAddress,
-      level: 0,
+      level: null,
       spiro: null,
       spirosOnSale: [],
       allSpiros: [],
@@ -140,6 +140,7 @@ export default {
         // [this.account] = accounts;
         this.account = accounts[0];
         this.getSpiro();
+        // this.getLevel();
         // this.getSpiros();
         this.getContractSpiros();
       }).catch((err) => {
@@ -175,25 +176,31 @@ export default {
 
     buyNew () {
       let lvl;
+      this.isLoading = true;
+
       this.contractInstance.methods.spiros(this.spiroIdToBuy).call({
           from: this.account
         }).then((s) => {
           lvl = s.level;
         });
         let amt = lvl * 0.005;
+
       this.contractInstance.methods.buyNewSpiro(this.spiroIdToBuy).send({
         from: this.account,
         value: web3.toWei(amt, 'ether')
       }).then((receipt) => {
+        
+        this.getContractSpiros();
+        this.getSpiro();
+
         this.addSpiroFromReceipt(receipt);
         this.spiro = this.spiroIdToBuy;
+
         this.isLoading = false;
       }).catch((err) => {
         console.log (err);
         this.isLoading = false;
       });
-      this.getContractSpiros();
-      this.getSpiro();
     },
 
     getSpiro() {
@@ -202,11 +209,16 @@ export default {
         from:this.account
       }).then((receipt) => {
         this.spiro = receipt;
-        this.contractInstance.methods.spiros(this.spiro).call({
-          from: this.account
-        }).then((s) => {
-          this.level = s.level;
-        });
+        this.level = receipt;
+        // this.contractInstance.methods.spiros(this.spiro).call({
+        //   from: this.account
+        // }).then((s) => {
+        //   console.log ("this.spiro = ", this.spiro);
+        //   console.log("setting level to: ", s.level);
+        //   console.log(s);
+        //   this.level = s.level;
+        // });
+        
         this.isLoading = false;
         console.log ("user spiro set to: ", this.spiro);
       }).catch((err) => {
@@ -238,6 +250,7 @@ export default {
     },
 
     sellSpiro () {
+      this.isLoading = true;
       this.contractInstance.methods.sellSpiro(this.sellSpiroId).send({
         from: this.account
       }).then((receipt) => {
@@ -245,6 +258,7 @@ export default {
         this.spiro = null;
         this.getSpiro();
         this.getSpirosOnSale();
+        this.isLoading = false;
       });
     } ,
 

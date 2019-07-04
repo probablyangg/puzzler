@@ -41,4 +41,5 @@ Switch to Ropsten Testnet on Metamask
 * [Metamask](https://metamask.io/)
 * [web3.js](https://github.com/ethereum/web3.js/)
 
-(Contract Address: 0xeefae6bcd0b0ac6691579a9ce84ed438893c3c52)
+
+(Contract Address: [0x1a2b0342db7b78201aa8d016733376ccd6e0382b](https://ropsten.etherscan.io/token/0x1a2b0342db7b78201aa8d016733376ccd6e0382b))
