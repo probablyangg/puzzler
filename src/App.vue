@@ -45,17 +45,6 @@
         <p><b>Spiro: </b> {{ spiro }} <b>PZLR</b> </p>
       </b-col>
     </b-row>
-    <!-- <b-row>
-      <b-col>
-        <p><b>Spiros on sale: </b> <span v-for ="i in spirosOnSale"> {{ i }}, </span> </p>
-      </b-col>
-    </b-row> -->
-    <!-- <b-row>
-      <b-col>
-        {{ k = 0 }}
-        <p><b>Spiros generated so far: </b> <ul> <li v-for ="i in allSpiros"> {{ k ++ }} {{ i }} </li> </ul> </p>
-      </b-col>
-    </b-row> -->
     <b-row>
       <b-col>
         <p><b>Spiros owned by the contract (spiroId, level): </b> <ul> <li v-for ="i in contractSpiros"> {{ i }}  </li> </ul> </p>
@@ -194,32 +183,21 @@ export default {
           amt = lvl * 0.005;
           return amt;
           // console.log("level: ", lvl);
-        }).then((amt)=> {
-          console.log ("amt", amt);
-this.contractInstance.methods.buyNewSpiro(this.spiroIdToBuy).send({
-        from: this.account,
-        value: web3.toWei(amt, 'ether')
-      }).then((receipt) => {
-        
-        // this.getContractSpiros();
-        // this.getSpiro();
-
-        // this.addSpiroFromReceipt(receipt);
+          }).then((amt)=> {
+            console.log ("amt", amt);
+            this.contractInstance.methods.buyNewSpiro(this.spiroIdToBuy).send({
+                from: this.account,
+                value: web3.toWei(amt, 'ether')
+            }).then((receipt) => {
         this.spiro = this.spiroIdToBuy;
-
         this.isLoading = false;
-
         this.getContractSpiros();
         this.getSpiro();
-
       }).catch((err) => {
         console.log (err);
         this.isLoading = false;
       });
         })
-        // let amt = lvl * 0.005;
-        // console.log ("sending amt: ", amt);
-
         
     },
 
@@ -261,12 +239,8 @@ this.contractInstance.methods.buyNewSpiro(this.spiroIdToBuy).send({
           this.contractInstance.methods.spiros(cS[i]).call ({
             from:this.account 
           }).then((spiro) => {
-            console.log ("level for", spiro, " is ", spiro.level);
-
-            // console.log (cS[i] += ", "  + spiro.level);
-            
+            console.log ("level for", spiro, " is ", spiro.level);            
             cS[i] += ", "  + spiro.level;
-            
             this.contractSpiros.push(cS[i]);
           })
         }
@@ -278,18 +252,11 @@ this.contractInstance.methods.buyNewSpiro(this.spiroIdToBuy).send({
       });
     },
 
-    getAllSpiros () {
-      this.contractInstance.methods.spiros().call ({
-
-      })
-    },
-
     getSpirosOnSale () {
       this.contractInstance.methods.getUpForSellingSpiros().call({
         from: this.account
       }).then((onSale) => {
         this.spirosOnSale = onSale;
-        // console.log ("user spiro set to: ", this.contractSpiros);
       }).catch((err) => {
         console.log (err, 'err');
       });
@@ -301,24 +268,11 @@ this.contractInstance.methods.buyNewSpiro(this.spiroIdToBuy).send({
         from: this.account
       }).then((receipt) => {
         console.log(receipt);
-        // this.spiro = null;
         this.getSpiro();
         this.getContractSpiros();
-        // this.getSpirosOnSale();
         this.isLoading = false;
       });
-    } ,
-
-    // addSpiroFromReceipt(receipt) {
-    //   console.log("---");
-    //   console.log(receipt);
-    //   console.log(typeof(receipt));
-    //   this.allSpiros.push({
-    //     level: receipt.events.newSpiro.returnValues.level,
-    //     creator: receipt.events.newSpiro.returnValues.creator
-    //   });
-    //   console.log(this.allSpiros);
-    // }
+    }
   },
 };
 </script>
