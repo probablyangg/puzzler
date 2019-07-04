@@ -143,6 +143,7 @@ export default {
         // this.getLevel();
         // this.getSpiros();
         this.getContractSpiros();
+        this.getSpirosOnSale();
       }).catch((err) => {
         console.log(err, 'err!!');
       });

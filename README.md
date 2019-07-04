@@ -2,9 +2,9 @@
 
 A simple Ethereum based decentralized application demonstrating usage of ERC-721 tokens.
 
-![Puzzler](./puzzler.png)
-
 ## Description
+
+![Puzzler](./puzzler.png)
 
 - Answering questions would increment the level for the user.
 - Each puzzle solved mints an ERC-721 token (PZLR), which is owned by the smart contract. Called 'Spiro' in the game.
@@ -12,9 +12,8 @@ A simple Ethereum based decentralized application demonstrating usage of ERC-721
   - creator 
   - level at which it was created
 - User has an option to either:
-  - freeze his/her progress (level) by buying the spiro
+  - freeze his/her progress (level) or level up by buying one of the available spiros and paying a pre defined price - `(spiro.level * 0.005).ether`
   - sell the spiro he/she owns.
-  - buy another spiro - of a higher level
 - Contract is currently deployed on Ropsten Testnet
 
 
