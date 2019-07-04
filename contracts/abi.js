@@ -35,20 +35,6 @@ const contractAbi = [
 		"constant": false,
 		"inputs": [
 			{
-				"name": "_spiroId",
-				"type": "uint256"
-			}
-		],
-		"name": "buySpiro",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
 				"name": "userLevel",
 				"type": "uint256"
 			}
@@ -113,30 +99,6 @@ const contractAbi = [
 			}
 		],
 		"name": "emitBought",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "_spiroId",
-				"type": "uint256"
-			}
-		],
-		"name": "emitSaleOfferRemoved",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "user",
-				"type": "address"
-			}
-		],
-		"name": "emitLevelUp",
 		"type": "event"
 	},
 	{
@@ -646,25 +608,6 @@ const contractAbi = [
 		"constant": true,
 		"inputs": [],
 		"name": "totalSupply",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "userProgress",
 		"outputs": [
 			{
 				"name": "",

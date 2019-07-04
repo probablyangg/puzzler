@@ -20,11 +20,10 @@ contract puzzler is ERC721Full {
     }
     // list of existing spiros 
     Spiro[] public spiros;
-    
-    // maps each user to his progress in the puzzler
-    mapping (address => uint256) public userProgress;   
+      
     // ether balance of all users     
     mapping (address => uint) public balanceOfEther;
+    
     // if 0, spiro not for sale 
     mapping (uint => uint) public spiroToSalePrice;
     
@@ -41,10 +40,6 @@ contract puzzler is ERC721Full {
     event emitUpForSale (uint256 _spiroId);
     // bought a spiro 
     event emitBought (uint256 _spiroId, uint256 _at, address _by);
-    // sale offer removed from spiro 
-    event emitSaleOfferRemoved (uint256 _spiroId);
-    // user levelled up 
-    event emitLevelUp (address user);
     
     // ----------------
     // Constructors
@@ -57,14 +52,16 @@ contract puzzler is ERC721Full {
     // Functions
     // ----------------
     
-    // check to see if a given address is that of a contract 
+    /** @dev check to see if a given address is that of a contract 
+     */
     function isContract(address addr) public view returns (bool) {
         uint size;
         assembly { size := extcodesize(addr) }
         return size > 0;
     }
     
-    // fallback function
+    /** @dev fallback function 
+     */
     function() external payable {
     }
     
@@ -74,71 +71,30 @@ contract puzzler is ERC721Full {
       */
     function createSpiro(uint userLevel) public returns (uint) {
         require(msg.sender != address(0));
-        require (userLevel > 0);
-        
         Spiro memory NewSpiro = Spiro ({
             level: userLevel,
             creator: msg.sender
         });
-        
         uint256 newSpiroId = spiros.push(NewSpiro).sub(1);
-        
         // the minted token is owned by the smart contract until purchased
         super._mint(address(this), newSpiroId);
-        
-        // update user progress 
-        userProgress[msg.sender] = userLevel;
-        emit emitLevelUp (msg.sender);
-        
         // created-by and level of the creator
         emit newSpiro (msg.sender, userLevel);
-        
         return newSpiroId;
     }
     
-    /**@dev function to allow user to buy the spiro he has created   
+    /**@dev function to allow user to buy the spiro he/she has created   
      * transfer of ownership from the contract to the creator
      */
     function buyNewSpiro (uint _spiroId) public payable {
         uint amount = spiros[_spiroId].level * 0.005 ether;
         require (msg.value == amount);
-        require (spiros[_spiroId].creator == msg.sender);
-        require (userProgress[msg.sender] == spiros[_spiroId].level);
         require (!isContract(msg.sender));
         ownerToSpiro[msg.sender] = _spiroId;
-        
         super._transferFrom(ownerOf(_spiroId), msg.sender, _spiroId);
-        
-        // spiroToSalePrice[_spiroId] = 0; // not exactly required. But jussssst to be on safe side
-        
-        balanceOfEther[msg.sender] += msg.value;
-        
-        emit emitBought (_spiroId, msg.value, msg.sender);
-    }
-    
-    /**@dev function to allow user to buy a spiro from a different owner
-     */
-    function buySpiro(uint _spiroId) public payable {
-        
-        require (spiroToSalePrice[_spiroId] > 0);
-        require (msg.value == spiroToSalePrice[_spiroId]);
-        require (!isContract(msg.sender));
-        // can only buy a spiro representing a higher level 
-        require(userProgress[msg.sender] <= spiros[_spiroId].level);
-        
-        // user can only own a single spiro - 
-        // buying a spiro while already owning one would automatically 
-        // put for sale the previously owned spiro
-        sellSpiro (ownerToSpiro[msg.sender]);
-        
-        ownerToSpiro[msg.sender] = _spiroId;
-        
-        super._transferFrom(ownerOf(_spiroId), msg.sender, _spiroId);
-        
-        balanceOfEther[msg.sender] += msg.value;
         spiroToSalePrice[_spiroId] = 0;
-        
-        emit emitBought(_spiroId, msg.value, msg.sender);
+        balanceOfEther[msg.sender] += msg.value;
+        emit emitBought (_spiroId, msg.value, msg.sender);
     }
     
     /**@dev sell a spiro 
@@ -147,11 +103,12 @@ contract puzzler is ERC721Full {
     function sellSpiro(uint _spiroId) public {
         require (msg.sender == ownerOf(_spiroId));
         require (!isContract(msg.sender));
-        
         uint salePrice = spiros[_spiroId].level * 0.005 ether;
-        
+        ownerToSpiro[msg.sender] = 0;
+        super._transferFrom(ownerOf(_spiroId), address(this), _spiroId);
+        balanceOfEther[msg.sender] -= salePrice;
         spiroToSalePrice[_spiroId] = salePrice;
-        userProgress[msg.sender] = 0;
+        // userProgress[msg.sender] = 0;
         emit emitUpForSale(_spiroId);
     }
     
@@ -190,7 +147,5 @@ contract puzzler is ERC721Full {
             }
         }
         return result;
-    } 
-    
-    
+    }    
 }

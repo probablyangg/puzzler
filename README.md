@@ -40,3 +40,5 @@ Switch to Ropsten Testnet on Metamask
 * [Vue.js](https://vuejs.org/) 
 * [Metamask](https://metamask.io/)
 * [web3.js](https://github.com/ethereum/web3.js/)
+
+(Contract Address: 0xeefae6bcd0b0ac6691579a9ce84ed438893c3c52)

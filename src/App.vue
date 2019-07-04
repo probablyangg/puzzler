@@ -47,7 +47,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <p><b>SpiroID on sale: </b> <span v-for ="i in spirosOnSale"> {{ i }}, </span> </p>
+        <p><b>Spiros on sale: </b> <span v-for ="i in spirosOnSale"> {{ i }}, </span> </p>
       </b-col>
     </b-row>
     <b-row>
@@ -113,7 +113,7 @@ import allQuestions from './components/questions.json';
 import getWeb3 from '../contracts/web3';
 import contractAbi from '../contracts/abi';
 //puzzlerContract
-const contractAddress = '0xb572e8d58b214455e6aff3aee9e0e8f55a102354';
+const contractAddress = '0x1a2b0342db7b78201aa8d016733376ccd6e0382b';
 export default {
   name: 'App',
   data() {
@@ -122,8 +122,8 @@ export default {
       account: null,
       contractInstance: null,
       contractAddr: contractAddress,
-      level: 1,
-      spiro: "-",
+      level: 0,
+      spiro: null,
       spirosOnSale: [],
       allSpiros: [],
       contractSpiros: [],
@@ -193,6 +193,7 @@ export default {
         this.isLoading = false;
       });
       this.getContractSpiros();
+      this.getSpiro();
     },
 
     getSpiro() {
@@ -225,21 +226,28 @@ export default {
       });
     },
 
+    getSpirosOnSale () {
+      this.contractInstance.methods.getUpForSellingSpiros().call({
+        from: this.account
+      }).then((onSale) => {
+        this.spirosOnSale = onSale;
+        // console.log ("user spiro set to: ", this.contractSpiros);
+      }).catch((err) => {
+        console.log (err, 'err');
+      });
+    },
+
     sellSpiro () {
       this.contractInstance.methods.sellSpiro(this.sellSpiroId).send({
         from: this.account
       }).then((receipt) => {
-        console.log ("ok");
-        this.contractInstance.methods.spiroToSalePrice(this.sellSpiroId).call ({
-          from: this.account
-        }).then ((price) => {
-          console.log ("now pushing");
-          spirosOnSale.push(sellSpiroId, price);
-        })
-        this.spiro = "-"
-        getSpiro();
+        console.log(receipt);
+        this.spiro = null;
+        this.getSpiro();
+        this.getSpirosOnSale();
       });
     } ,
+
     addSpiroFromReceipt(receipt) {
       console.log("---");
       console.log(receipt);
