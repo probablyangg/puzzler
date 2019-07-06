@@ -239,9 +239,11 @@ export default {
           this.contractInstance.methods.spiros(cS[i]).call ({
             from:this.account 
           }).then((spiro) => {
-            console.log ("level for", spiro, " is ", spiro.level);            
-            cS[i] += ", "  + spiro.level;
-            this.contractSpiros.push(cS[i]);
+            console.log ("level for", spiro, " is ", spiro.level);      
+            if (spiro.level != 0) {
+              cS[i] += ", "  + spiro.level;
+              this.contractSpiros.push(cS[i]);
+            }
           })
         }
 

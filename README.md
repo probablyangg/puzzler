@@ -15,7 +15,7 @@ A simple Ethereum based decentralized application demonstrating usage of ERC-721
 - Stats description: 
   - **Level**: current level (generated on frontend)
   - **Spiro**: spiro associated to the user (queried from the contract)
-  - **Spiros owned by the contract**: Spiros not owned by any user - can be bought. Displays comma separated tuple of spiroId and corresponding level. (queried from the contract)
+  - **Spiros owned by the contract**: Spiros not owned by any user - can be bought. Displays comma separated tuple of spiroId and corresponding level. Note: spiros with level 0 are not displayed. (queried from the contract)
   - **Total number of questions**: total number of questions that can be solved (or max level reachable) - picked from a json file
 - User has an option to:
   - level up by buying one of the available spiros and paying a pre defined price - `(spiro.level * 0.005).ether`
