@@ -1,6 +1,6 @@
 {
-  "name": "cryptovipers",
-  "description": "OpenBerry's tutorial for CryptoKitties",
+  "name": "puzzler",
+  "description": "A simple Dapp demonstrating usage of ERC-721 tokens",
   "version": "1.0.0",
   "author": "",
   "private": true,
@@ -12,6 +12,7 @@
     "bootstrap": "^4.0.0-beta.2",
     "bootstrap-vue": "^2.0.0-rc.2",
     "popper.js": "^1.12.9",
+    "uglifyjs-webpack-plugin": "^2.1.3",
     "vue": "^2.5.3",
     "web3": "^1.0.0-beta.37"
   },
