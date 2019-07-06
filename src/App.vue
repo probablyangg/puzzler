@@ -47,12 +47,18 @@
     </b-row>
     <b-row>
       <b-col>
-        <p><b>Spiros owned by the contract (spiroId, level): </b> <ul> <li v-for ="i in contractSpiros"> {{ i }}  </li> </ul> </p>
+        <p><b>Spiros owned by the contract (spiroID, level): </b> <ul> <li v-for ="i in contractSpiros"> {{ i }}  </li> </ul> </p>
+        <small><p>Spiros with level > 0 are displayed.</p></small>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
         <p><b>Total number of questions: </b> {{ questions.length }} </p>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <p><b>Total spiros minted: </b> {{ totalSpiros }} </p>
       </b-col>
     </b-row>
     <hr>
@@ -122,7 +128,8 @@ export default {
       allSpiros: [],
       contractSpiros: [],
       isLoading: false,
-      questions: allQuestions
+      questions: allQuestions,
+      totalSpiros: null
       
     };
   },
@@ -137,7 +144,8 @@ export default {
         // this.getLevel();
         // this.getSpiros();
         this.getContractSpiros();
-        this.getSpirosOnSale();
+        // this.getSpirosOnSale();
+        this.getTotalSpiros();
       }).catch((err) => {
         console.log(err, 'err!!');
       });
@@ -170,7 +178,14 @@ export default {
       }
       // this.getContractSpiros();
     }, 
-
+    getTotalSpiros() {
+      this.contractInstance.methods.totalSupply().call ({
+        from: this.account
+      }).then((totalSupply) => {
+        console.log("total supply: ", totalSupply);
+        this.totalSpiros = totalSupply;
+      });
+    },
     buyNew () {
       let lvl;
       let amt;
@@ -249,16 +264,6 @@ export default {
 
         console.log("contractSpiros: ", this.contractSpiros);
 
-      }).catch((err) => {
-        console.log (err, 'err');
-      });
-    },
-
-    getSpirosOnSale () {
-      this.contractInstance.methods.getUpForSellingSpiros().call({
-        from: this.account
-      }).then((onSale) => {
-        this.spirosOnSale = onSale;
       }).catch((err) => {
         console.log (err, 'err');
       });
