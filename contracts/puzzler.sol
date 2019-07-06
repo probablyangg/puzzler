@@ -36,11 +36,11 @@ contract puzzler is ERC721Full {
     // ----------------
     
     // new spiro generation
-    event newSpiro (address creator, uint level);
+    // event newSpiro (address creator, uint level);
     // new spiro up for sale 
-    event emitUpForSale (uint256 _spiroId);
+    // event emitUpForSale (uint256 _spiroId);
     // bought a spiro 
-    event emitBought (uint256 _spiroId, uint256 _at, address _by);
+    // event emitBought (uint256 _spiroId, uint256 _at, address _by);
     
     // ----------------
     // Constructors
