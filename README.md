@@ -5,21 +5,19 @@ A simple Ethereum based decentralized application demonstrating usage of ERC-721
 ## Description
 
 <!-- ![Puzzler](./puzzler.png) -->
-<p align = center><img src="./puzzler.png" height="550" center></p>
+<p align = center><img src="./puzzler.png" center></p>
 
 - Answering questions would increment the level for the user.
 - Each puzzle solved mints an ERC-721 token (PZLR), which is owned by the smart contract. Called 'Spiro' in the game.
 - Each Spiro is representative of: 
   - creator 
   - level at which it was created
-- Stats description: 
-  - **Level**: current level (generated on frontend)
-  - **Spiro**: spiro associated to the user (queried from the contract)
-  - **Spiros owned by the contract**: Spiros not owned by any user - can be bought. Displays comma separated tuple of spiroId and corresponding level. Note: spiros with level 0 are not displayed. (queried from the contract)
-  - **Total number of questions**: total number of questions that can be solved (or max level reachable) - picked from a json file
-- User has an option to:
-  - level up by buying one of the available spiros and paying a pre defined price - `(spiro.level * 0.005).ether`
-  - sell the spiro he/she owns.
+- Each user can own a single Spiro that represents the current level of the user in the game.
+- User has an option to sell that spiro
+  - would reset his/her level to 0
+- Available spiros with level strictly greater than user's level are displayed in the left. These spiros can be bought to level up. 
+- Total number of questions is the number of questions available in the database - currently a .json file
+  - can also be seen as the "max level reachable"
 - Contract is currently deployed on Ropsten Testnet
 
 ## Usage
@@ -35,12 +33,6 @@ A simple Ethereum based decentralized application demonstrating usage of ERC-721
     - generates an alert on the page
 - User can buy one of the spiros owned by the contract - to level up.
 - User can sell his/her owned token - would change level and spiro to 0.
-
-## TL;DR
-
-Answer questions to mint Spiro, buy spiro from the contract (corresponding to the level you want to freeze to), sell your spiro (goes back to the contract). 
-
-So basically, once you open the app, you have an option to either buy a spiro (NFT) of a corresponding level you want to get to, or mint tokens by answering questions, or sell the token you own. 
 
 ## Running Locally
 
